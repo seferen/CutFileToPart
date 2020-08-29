@@ -3,11 +3,6 @@ package ru.zubovis.cutFileToPart;
 import org.apache.log4j.Logger;
 import ru.zubovis.cutFileToPart.Utills.FileUtils;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Программа предназначена для разделения файлов на несколько частей, количество частей определяется переменной partfile.
@@ -20,31 +15,16 @@ public class Main {
 
     private static Logger log = Logger.getLogger(Main.class);
 
-    static long part = Long.parseLong(System.getProperty("countOfPart", "5"));
-    static String fileName = System.getProperty("fileName", "test.txt");
-
-
     public static void main(String[] args) {
 
+        log.info("Application was started");
 
-        try {
-            final long countString = FileUtils.getCountString(fileName);
-
-            log.info("count of sting: " + countString);
-
-            long countOfStrings = (countString + part) / part;
-            log.info(countOfStrings);
-            for (int i = 0; i < part; i++) {
-                Files.write(Paths.get(fileName + i),
-                        Files.lines(Paths.get(fileName)).skip(i * countOfStrings).limit(countOfStrings).collect(Collectors.toCollection(ArrayList::new)));
-
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-
-        }
+        FileUtils fileUtils = new FileUtils()
+                .setFileName("test.txt")
+                .setNumberOfParts(3)
+                .splitFile();
+        log.info("Application was finished");
 
 
-//
     }
 }
